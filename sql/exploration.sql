@@ -2,6 +2,7 @@ ATTACH 'data/sakila.duckdb' AS source;
 
 
 -- Shows that one movie can have several actors, therefore the actor table will be handled as its own dimension
+-- Since i want to be able to slice on singular actors primarily
 select
     f.film_id,
     count(distinct (a.first_name)) as actors
