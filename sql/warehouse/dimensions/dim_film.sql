@@ -1,7 +1,7 @@
 -- Film dimension definition
 -- To run directly: .read sql/warehouse/dimensions/dim_films.sql
 Create table
-    if not exists warehouse.dim_films as
+    if not exists warehouse.dim_film as
 select
     row_number() over (
         order by
@@ -46,6 +46,3 @@ select
     film_id
 from
     source.film_actor;
-
-
--- to do: hantera special features

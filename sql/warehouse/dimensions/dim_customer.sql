@@ -1,7 +1,7 @@
 -- Customer dimension table definition
 -- To run directly: .read sql/warehouse/dimensions/dim_customer.sql
 Create table
-    if not exists warehouse.DimCustomers as
+    if not exists warehouse.dim_customer as
 select
     row_number() over (
         order by

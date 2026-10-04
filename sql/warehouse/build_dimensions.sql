@@ -2,4 +2,5 @@
 -- Run from the repo root: duckdb mydb.duckdb -c ".read sql/warehouse/build.sql"
 
 .read sql/warehouse/dimensions/dim_customer.sql
-.read sql/warehouse/dimensions/dim_films.sql
+.read sql/warehouse/dimensions/dim_film.sql
+.read sql/warehouse/dimensions/dim_store.sql
