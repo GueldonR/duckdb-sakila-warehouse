@@ -4,3 +4,4 @@
 .read sql/warehouse/dimensions/dim_customer.sql
 .read sql/warehouse/dimensions/dim_film.sql
 .read sql/warehouse/dimensions/dim_store.sql
+.read sql/warehouse/dimensions/dim_staff.sql
