@@ -1,0 +1,74 @@
+models:
+  - name: stg_customer
+    description: One row per customer, cleaned from sakila.customer.
+    columns:
+      - name: customer_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: address_id
+        description: Foreign key to stg_address.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_address')
+                field: address_id
+      - name: email
+        description: Customer email, trimmed and lowercased.
+        data_tests: [unique]
+      - name: is_active
+        description: True if the customer account is active.
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_address
+    description: One row per address, cleaned from sakila.address.
+    columns:
+      - name: address_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: city_id
+        description: Foreign key to stg_city.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_city')
+                field: city_id
+      - name: address
+        description: The street address name.
+        data_tests: [not_null]
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_city
+    description: One row per city, cleaned from sakila.city.
+    columns:
+      - name: city_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: country_id
+        description: Foreign key to stg_country.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_country')
+                field: country_id
+      - name: city
+        description: The city name.
+        data_tests: [not_null]
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_country
+    description: One row per country, cleaned from sakila.country.
+    columns:
+      - name: country_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: country
+        description: The country name.
+        data_tests: [not_null]
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.

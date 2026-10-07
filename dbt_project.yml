@@ -5,10 +5,11 @@ profile: sakila_dw
 model-paths: ["models"]
 test-paths: ["tests"]
 analysis-paths: ["analyses"]
+macro-paths: ["macros"]
 
 models:
   sakila_dw:
     staging:
       +materialized: view
     marts:
-      +materialized: table
+      +materialized: table #incremental for scale
