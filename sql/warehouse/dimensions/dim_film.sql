@@ -26,21 +26,13 @@ from
     left join source.language l on l.language_id = f.language_id
     left join source.language ol on ol.language_id = f.original_language_id
     left join source.film_category fc on fc.film_id = f.film_id
+    -- In source: category 1-1 with film
     left join source.category c on fc.category_id = c.category_id;
 
 
 -- Actor m:n film lookup table defintion from source into warehouse
 Create table
     if not exists warehouse.bridge_film_actor as
-select
-    actor_id,
-    film_id
-from
-    source.film_actor;
-
-
-Create table
-    if not exists warehouse.bridge_film_category as
 select
     actor_id,
     film_id
