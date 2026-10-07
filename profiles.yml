@@ -1,0 +1,10 @@
+sakila_dw:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: data/warehouse.duckdb
+      attach:
+        - path: data/sakila.duckdb
+          alias: sakila
+          read_only: true
