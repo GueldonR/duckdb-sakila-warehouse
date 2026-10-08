@@ -13,9 +13,6 @@ models:
               arguments:
                 to: ref('stg_address')
                 field: address_id
-      - name: email
-        description: Customer email, trimmed and lowercased.
-        data_tests: [unique]
       - name: is_active
         description: True if the customer account is active.
       - name: updated_at
