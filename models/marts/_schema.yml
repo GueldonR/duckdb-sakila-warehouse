@@ -18,10 +18,10 @@ models:
         description: The store to which the customer belongs.
         data_tests:
           - not_null
-          # - relationships:
-          #     arguments:
-          #       to: ref('stg_store')
-          #       field: store_id
+          - relationships:
+              arguments:
+                to: ref('stg_store')
+                field: store_id
       - name: customer_city
         data_tests:
           - not_null

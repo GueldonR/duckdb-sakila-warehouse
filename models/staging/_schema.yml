@@ -69,3 +69,28 @@ models:
         data_tests: [not_null]
       - name: updated_at
         description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+  
+  - name: stg_store
+    description: One row per store, cleaned from sakila.store.
+    columns:
+      - name: store_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: manager_staff_id
+        description: Foreign key to stg_staff.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_staff')
+                field: staff_id
+      - name: address_id
+        description: Foreign key to stg_address.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_address')
+                field: address_id
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; assumed UTC.
