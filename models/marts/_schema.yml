@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: dim_customer
-    description: One row per customer, with location information
+    description: One row per customer. Location at district/city/country level; names, street address and postal code are not carried into the marts.
     columns:
       - name: customer_sk
         description: Surrogate key, md5 of customer_id.
@@ -14,8 +14,8 @@ models:
         data_tests:
           - unique
           - not_null
-      - name: store_id
-        description: The store to which the customer belongs.
+      - name: customer_store_id
+        description: Home store of the customer (source ID).
         data_tests:
           - not_null
           - relationships:
@@ -23,9 +23,11 @@ models:
                 to: ref('stg_store')
                 field: store_id
       - name: customer_city
+        description: City of the customer's address.
         data_tests:
           - not_null
       - name: customer_country
+        description: Country of the customer's address.
         data_tests:
           - not_null
 
