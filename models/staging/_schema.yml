@@ -142,3 +142,41 @@ models:
           data_tests: [not_null]
         - name: updated_at
           description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_category
+    description: One row per film category, cleaned from sakila.category.
+    columns:
+      - name: category_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: name
+        description: The category name.
+        data_tests: [not_null]
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_film_category
+    description: One row per film and category pair, cleaned from sakila.film_category. In the data every film has exactly one category.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [film_id, category_id]
+    columns:
+      - name: film_id
+        description: Foreign key to stg_film.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_film')
+                field: film_id
+      - name: category_id
+        description: Foreign key to stg_category.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_category')
+                field: category_id
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
