@@ -49,4 +49,18 @@ models:
                 to: ref('stg_store')
                 field: store_id
 
-  
+  - name: dim_store
+    description: One row per store. Store address is business data, not personal data, so it is kept to identify stores by location.
+    columns:
+      - name: store_sk
+        description: Surrogate key, md5 of store_id.
+        data_tests: [unique, not_null]
+      - name: store_id
+        description: Natural key from the source system.
+        data_tests: [unique, not_null]
+      - name: store_city
+        description: City of the store's address.
+        data_tests: [not_null]
+      - name: store_country
+        description: Country of the store's address.
+        data_tests: [not_null]
