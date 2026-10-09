@@ -105,3 +105,40 @@ models:
         description: True if the staff member is active.
       - name: updated_at
         description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_film
+    description: One row per film, cleaned from sakila.film. Description is dropped here (data minimisation).
+    columns:
+      - name: film_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: language_id
+        description: Foreign key to stg_language.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_language')
+                field: language_id
+      - name: rental_duration
+        description: The number of days the film can be rented for.
+      - name: rental_rate
+        description: The rental rate for the film.
+      - name: length
+        description: The length of the film in minutes.
+      - name: replacement_cost
+        description: The cost to replace the film.
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_language
+    description: One row per language, cleaned from sakila.language.
+    columns:
+        - name: language_id
+          description: Primary key from the source system.
+          data_tests: [unique, not_null]
+        - name: name
+          description: The language name.
+          data_tests: [not_null]
+        - name: updated_at
+          description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
