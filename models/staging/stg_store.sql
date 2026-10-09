@@ -5,7 +5,6 @@ with source_store as (
 cleaned as (
     select
         store_id,
-        manager_staff_id,
         address_id,
 
         last_update as updated_at
