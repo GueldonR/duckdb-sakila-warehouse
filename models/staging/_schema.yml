@@ -109,14 +109,6 @@ models:
               arguments:
                 to: ref('stg_store')
                 field: store_id
-      - name: address_id
-        description: Foreign key to stg_address.
-        data_tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('stg_address')
-                field: address_id
       - name: first_name
         description: The staff member's first name.
         data_tests: [not_null]

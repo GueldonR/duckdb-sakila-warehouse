@@ -6,7 +6,6 @@ cleaned as (
     select
         staff_id,
         store_id,
-        address_id,
 
         {{ clean_text('first_name') }} as first_name,
         {{ clean_text('last_name') }} as last_name,
