@@ -4,8 +4,7 @@ with staff as (
 
 final as (
     select
-        {{dbt_utils.generate_surrogate_key(['staff.staff_id'])}}
-            as staff_sk,
+        {{ dbt_utils.generate_surrogate_key(['staff.staff_id']) }} as staff_sk,
         staff.staff_id,
         staff.store_id as staff_store_id,
 
@@ -13,8 +12,7 @@ final as (
 
         date_trunc('second', current_timestamp at time zone 'UTC')
             as dbt_loaded_at
-    from
-        staff
+    from staff
 )
 
-select * from joined
+select * from final
