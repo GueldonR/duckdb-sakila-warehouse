@@ -94,3 +94,38 @@ models:
                 field: address_id
       - name: updated_at
         description: Last update in the source system. Naive timestamp, source time zone unknown; assumed UTC.
+  
+  - name: stg_staff
+    description: One row per staff member, cleaned from sakila.staff.
+    columns:
+      - name: staff_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: store_id
+        description: Foreign key to stg_store.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_store')
+                field: store_id
+      - name: address_id
+        description: Foreign key to stg_address.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_address')
+                field: address_id
+      - name: first_name
+        description: The staff member's first name.
+        data_tests: [not_null]
+      - name: last_name
+        description: The staff member's last name.
+        data_tests: [not_null]
+      - name: username
+        description: Login name in the source system.
+      - name: is_active
+        description: True if the staff member is active.
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
