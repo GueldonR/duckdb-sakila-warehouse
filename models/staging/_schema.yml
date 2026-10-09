@@ -1,6 +1,6 @@
 models:
   - name: stg_customer
-    description: One row per customer, cleaned from sakila.customer.
+    description: One row per customer, cleaned from sakila.customer. Names and email are dropped here (data minimisation).
     columns:
       - name: customer_id
         description: Primary key from the source system.
@@ -19,7 +19,7 @@ models:
         description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
 
   - name: stg_address
-    description: One row per address, cleaned from sakila.address.
+    description: One row per address, cleaned from sakila.address. Phone and address2 are dropped here (data minimisation).
     columns:
       - name: address_id
         description: Primary key from the source system.
@@ -88,7 +88,7 @@ models:
         description: Last update in the source system. Naive timestamp, source time zone unknown; assumed UTC.
   
   - name: stg_staff
-    description: One row per staff member, cleaned from sakila.staff.
+    description: One row per staff member, cleaned from sakila.staff. Names, username, email, password, picture and address are dropped here (data minimisation).
     columns:
       - name: staff_id
         description: Primary key from the source system.
@@ -101,14 +101,6 @@ models:
               arguments:
                 to: ref('stg_store')
                 field: store_id
-      - name: first_name
-        description: The staff member's first name.
-        data_tests: [not_null]
-      - name: last_name
-        description: The staff member's last name.
-        data_tests: [not_null]
-      - name: username
-        description: Login name in the source system.
       - name: is_active
         description: True if the staff member is active.
       - name: updated_at

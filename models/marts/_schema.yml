@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: dim_customer
-    description: One row per customer. Location at district/city/country level; names, street address and postal code are not carried into the marts.
+    description: One row per customer. Location at district/city/country level; names are dropped in staging, street address and postal code are not carried into the marts.
     columns:
       - name: customer_sk
         description: Surrogate key, md5 of customer_id.
