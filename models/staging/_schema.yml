@@ -268,9 +268,8 @@ models:
                 to: ref('stg_staff')
                 field: staff_id
       - name: rental_id
-        description: Foreign key to stg_rental. The rental that the payment is for.
+        description: Foreign key to stg_rental. The rental that the payment is for. Can be null in the source data.
         data_tests:
-          - not_null
           - relationships:
               arguments:
                 to: ref('stg_rental')
