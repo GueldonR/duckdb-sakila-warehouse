@@ -1,0 +1,52 @@
+models:
+  - name: stg_address
+    description: One row per address, cleaned from sakila.address. Phone, address2 and postal_code are dropped here (data minimisation).
+    columns:
+      - name: address_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: city_id
+        description: Foreign key to stg_city.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_city')
+                field: city_id
+      - name: address
+        description: The street address name.
+        data_tests: [not_null]
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_city
+    description: One row per city, cleaned from sakila.city.
+    columns:
+      - name: city_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: country_id
+        description: Foreign key to stg_country.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_country')
+                field: country_id
+      - name: city
+        description: The city name.
+        data_tests: [not_null]
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_country
+    description: One row per country, cleaned from sakila.country.
+    columns:
+      - name: country_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: country
+        description: The country name.
+        data_tests: [not_null]
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.

@@ -1,0 +1,16 @@
+models:
+  - name: dim_time
+    description: One row per calendar day. Date attributes for grouping and filtering facts by date.
+    columns:
+      - name: date_sk
+        description: Key for the date, an integer of the form YYYYMMDD.
+        data_tests: [unique, not_null]
+      - name: full_date
+        description: The calendar date. Natural key.
+        data_tests: [unique, not_null]
+      - name: month_key
+        description: Year and month as YYYYMM, for grouping months across years.
+      - name: iso_day_of_week
+        description: Day of the week, Monday is 1 and Sunday is 7.
+      - name: is_weekend
+        description: True for Saturday and Sunday.

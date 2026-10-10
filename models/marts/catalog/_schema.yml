@@ -1,0 +1,10 @@
+models:
+  - name: dim_film
+    description: One row per film. 
+    columns:
+      - name: film_sk
+        description: Surrogate key, md5 of film_id.
+        data_tests: [unique, not_null]
+      - name: film_id
+        description: Natural key from the source system.
+        data_tests: [unique, not_null]
