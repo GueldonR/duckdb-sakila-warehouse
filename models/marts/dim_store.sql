@@ -20,7 +20,6 @@ final as (
         store.store_id,
 
         address.address as store_address,
-        address.postal_code as store_postal_code,
         address.district as store_district,
         city.city as store_city,
         country.country as store_country,

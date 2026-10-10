@@ -9,7 +9,6 @@ cleaned as (
 
         {{clean_text('address')}} as address,
         {{clean_text('district')}} as district,
-        postal_code,
 
         last_update as updated_at
     from source_address

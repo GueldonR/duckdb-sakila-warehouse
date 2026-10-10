@@ -19,7 +19,7 @@ models:
         description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
 
   - name: stg_address
-    description: One row per address, cleaned from sakila.address. Phone and address2 are dropped here (data minimisation).
+    description: One row per address, cleaned from sakila.address. Phone, address2 and postal_code are dropped here (data minimisation).
     columns:
       - name: address_id
         description: Primary key from the source system.
@@ -178,5 +178,69 @@ models:
               arguments:
                 to: ref('stg_category')
                 field: category_id
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_inventory
+    description: One row per physical copy of a film in a store, cleaned from sakila.inventory.
+    columns:
+      - name: inventory_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: film_id
+        description: Foreign key to stg_film.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_film')
+                field: film_id
+      - name: store_id
+        description: Foreign key to stg_store. The store that holds the copy.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_store')
+                field: store_id
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_rental
+    description: One row per rental, cleaned from sakila.rental.
+    columns:
+      - name: rental_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: inventory_id
+        description: Foreign key to stg_inventory.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_inventory')
+                field: inventory_id
+      - name: customer_id
+        description: Foreign key to stg_customer.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customer')
+                field: customer_id
+                
+      - name: staff_id
+        description: Foreign key to stg_staff. The staff member who handled the rental.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_staff')
+                field: staff_id
+      - name: rental_date
+        description: When the film was rented. Naive timestamp, source time zone unknown; treated as UTC.
+        data_tests: [not_null]
+      - name: return_date
+        description: When the film was returned. Null if not yet returned. Naive timestamp, source time zone unknown; treated as UTC.
       - name: updated_at
         description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
