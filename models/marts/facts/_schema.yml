@@ -1,0 +1,112 @@
+models:
+  - name: fact_rental_transaction
+    description: One row per rental. Foreign keys to the dimensions plus the rental duration. Rentals not yet returned have no return date.
+    columns:
+      - name: rental_id
+        description: Degenerate key, identifies the rental (source ID).
+        data_tests: [unique, not_null]
+      - name: customer_sk
+        description: Foreign key to dim_customer.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customer')
+                field: customer_sk
+      - name: film_sk
+        description: Foreign key to dim_film, via the rented inventory copy.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_film')
+                field: film_sk
+      - name: store_sk
+        description: Foreign key to dim_store, the store holding the inventory copy.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_store')
+                field: store_sk
+      - name: staff_sk
+        description: Foreign key to dim_staff, the staff member who handled the rental.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_staff')
+                field: staff_sk
+      - name: rental_date_sk
+        description: Foreign key to dim_time, the date the film was rented.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_time')
+                field: date_sk
+      - name: return_date_sk
+        description: Foreign key to dim_time, the date the film was returned. Null for the 183 rentals not yet returned.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_time')
+                field: date_sk
+      - name: rental_days
+        description: Whole days between rental and return. Null if not returned.
+
+  - name: fact_payment_transaction
+    description: One row per payment. Foreign keys to the dimensions plus the payment amount. Film and store come from the linked rental, so they are null for payments without one.
+    columns:
+      - name: payment_id
+        description: Degenerate key, identifies the payment (source ID).
+        data_tests: [unique, not_null]
+      - name: rental_id
+        description: Degenerate key, the rental the payment belongs to. Null for 5 payments in the source data.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('fact_rental_transaction')
+                field: rental_id
+      - name: customer_sk
+        description: Foreign key to dim_customer.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customer')
+                field: customer_sk
+      - name: staff_sk
+        description: Foreign key to dim_staff, the staff member who took the payment.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_staff')
+                field: staff_sk
+      - name: film_sk
+        description: Foreign key to dim_film, via the linked rental. Null when the payment has no rental.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_film')
+                field: film_sk
+      - name: store_sk
+        description: Foreign key to dim_store, the store holding the rented inventory copy. Null when the payment has no rental.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_store')
+                field: store_sk
+      - name: payment_date_sk
+        description: Foreign key to dim_time, the date of the payment.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_time')
+                field: date_sk
+      - name: amount
+        description: Payment amount. Additive.
+        data_tests:
+          - not_null
