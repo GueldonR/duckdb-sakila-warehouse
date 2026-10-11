@@ -82,8 +82,10 @@ models:
       - name: full_date
         description: The calendar date. Natural key.
         data_tests: [unique, not_null]
-      - name: month_key
-        description: Year and month as YYYYMM, for grouping months across years.
+      - name: calendar_year
+        description: Year, the top level of the date hierarchy.
+      - name: first_day_of_month
+        description: First date of the month. Identifies a month across years, for grouping and sorting.
       - name: iso_day_of_week
         description: Day of the week, Monday is 1 and Sunday is 7.
       - name: is_weekend

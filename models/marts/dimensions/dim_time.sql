@@ -11,10 +11,9 @@ final as (
         cast(strftime(full_date, '%Y%m%d') as integer) as date_sk,
         full_date,
 
-        cast(year(full_date) as integer) as year_key,
+        cast(year(full_date) as integer) as calendar_year,
         quarter(full_date) as quarter_of_year,
         month(full_date) as month_of_year,
-        cast(strftime(full_date, '%Y%m') as integer) as month_key,
         monthname(full_date) as month_name,
         cast(date_trunc('month', full_date) as date) as first_day_of_month,
         weekofyear(full_date) as week_of_year,
