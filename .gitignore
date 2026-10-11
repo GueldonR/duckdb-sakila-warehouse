@@ -12,3 +12,6 @@ data/warehouse.duckdb*
 
 # Secrets
 .env
+
+# macOS
+.DS_Store
