@@ -1,4 +1,4 @@
-# sql-data-warehouse
+# duckdb-sakila-warehouse
 
 A star-schema data warehouse built from the [Sakila](https://dev.mysql.com/doc/sakila/en/) DVD-rental database, using **dbt** and **DuckDB**.
 
