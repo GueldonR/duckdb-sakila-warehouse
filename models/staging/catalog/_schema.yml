@@ -1,0 +1,75 @@
+models:
+  - name: stg_film
+    description: One row per film, cleaned from sakila.film. Description is dropped here (data minimisation).
+    columns:
+      - name: film_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: language_id
+        description: Foreign key to stg_language.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_language')
+                field: language_id
+      - name: rental_duration
+        description: The number of days the film can be rented for.
+      - name: rental_rate
+        description: The rental rate for the film.
+      - name: length
+        description: The length of the film in minutes.
+      - name: replacement_cost
+        description: The cost to replace the film.
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_language
+    description: One row per language, cleaned from sakila.language.
+    columns:
+        - name: language_id
+          description: Primary key from the source system.
+          data_tests: [unique, not_null]
+        - name: name
+          description: The language name.
+          data_tests: [not_null]
+        - name: updated_at
+          description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_category
+    description: One row per film category, cleaned from sakila.category.
+    columns:
+      - name: category_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: name
+        description: The category name.
+        data_tests: [not_null]
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.
+
+  - name: stg_film_category
+    description: One row per film and category pair, cleaned from sakila.film_category. In the data every film has exactly one category.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [film_id, category_id]
+    columns:
+      - name: film_id
+        description: Foreign key to stg_film.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_film')
+                field: film_id
+      - name: category_id
+        description: Foreign key to stg_category.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_category')
+                field: category_id
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.

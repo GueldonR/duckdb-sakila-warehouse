@@ -1,0 +1,38 @@
+models:
+  - name: stg_payment
+    description: One row per payment, cleaned from sakila.payment.
+    columns:
+      - name: payment_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: customer_id
+        description: Foreign key to stg_customer.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customer')
+                field: customer_id
+      - name: staff_id
+        description: Foreign key to stg_staff. The staff member who handled the payment.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_staff')
+                field: staff_id
+      - name: rental_id
+        description: Foreign key to stg_rental. The rental that the payment is for. Can be null in the source data.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_rental')
+                field: rental_id
+      - name: amount
+        description: The amount of the payment.
+        data_tests: [not_null]
+      - name: payment_date
+        description: When the payment was made. Naive timestamp, source time zone unknown; treated as UTC.
+        data_tests: [not_null]
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.

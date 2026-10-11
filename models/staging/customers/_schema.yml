@@ -1,0 +1,19 @@
+models:
+  - name: stg_customer
+    description: One row per customer, cleaned from sakila.customer. Names and email are dropped here (data minimisation).
+    columns:
+      - name: customer_id
+        description: Primary key from the source system.
+        data_tests: [unique, not_null]
+      - name: address_id
+        description: Foreign key to stg_address.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_address')
+                field: address_id
+      - name: is_active
+        description: True if the customer account is active.
+      - name: updated_at
+        description: Last update in the source system. Naive timestamp, source time zone unknown; treated as UTC.

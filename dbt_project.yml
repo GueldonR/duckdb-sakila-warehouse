@@ -1,0 +1,17 @@
+name: sakila_dw
+version: "1.0"
+profile: sakila_dw
+
+model-paths: ["models"]
+test-paths: ["tests"]
+analysis-paths: ["analyses"]
+macro-paths: ["macros"]
+
+models:
+  sakila_dw:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table #incremental for scale
+flags:
+  require_generic_test_arguments_property: true

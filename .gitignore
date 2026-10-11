@@ -1,2 +1,17 @@
 # DuckDB
 *.wal
+.venv
+
+# dbt
+target/
+logs/
+dbt_packages/
+dbt_internal_packages/
+.user.yml
+data/warehouse.duckdb*
+
+# Secrets
+.env
+
+# macOS
+.DS_Store
