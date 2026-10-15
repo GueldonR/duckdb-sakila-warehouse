@@ -6,7 +6,7 @@ with generate_date as (
     from range(date '2005-01-01', date '2007-01-01', interval 1 day)
 ),
 
-final as (
+calendar as (
     select
         cast(strftime(full_date, '%Y%m%d') as integer) as date_sk,
         full_date,
@@ -23,6 +23,31 @@ final as (
         case when isodow(full_date) in (6, 7) then true else false end
             as is_weekend
     from generate_date
+),
+
+-- Default row: 
+no_date as (
+    select
+        -1 as date_sk,
+
+        date '9999-12-31' as full_date,
+
+        null as calendar_year,
+        null as quarter_of_year,
+        null as month_of_year,
+        'No date' as month_name,
+        null as first_day_of_month,
+        null as week_of_year,
+        null as day_of_month,
+        null as iso_day_of_week,
+        'No date' as day_name,
+        null as is_weekend
+),
+
+final as (
+    select * from calendar
+    union all
+    select * from no_date
 )
 
 select * from final
