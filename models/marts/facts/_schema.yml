@@ -46,8 +46,9 @@ models:
                 to: ref('dim_time')
                 field: date_sk
       - name: return_date_sk
-        description: Foreign key to dim_time, the date the film was returned. Null for the 183 rentals not yet returned.
+        description: Foreign key to dim_time, the date the film was returned. -1 (dim_time's "No date" row) for the 183 rentals not yet returned.
         data_tests:
+          - not_null
           - relationships:
               arguments:
                 to: ref('dim_time')
