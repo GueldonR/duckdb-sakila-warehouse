@@ -14,7 +14,7 @@ country as (
     select * from {{ ref('stg_country') }}
 ),
 
-final as (
+stores as (
     select
         {{ dbt_utils.generate_surrogate_key(['store.store_id']) }} as store_sk,
         store.store_id,
@@ -30,6 +30,27 @@ final as (
     left join address on address.address_id = store.address_id
     left join city on city.city_id = address.city_id
     left join country on country.country_id = city.country_id
+),
+
+-- Default row:
+unknown_store as (
+    select
+        '-1' as store_sk,
+        -1 as store_id,
+
+        null as store_address,
+        null as store_district,
+        'Unknown' as store_city,
+        'Unknown' as store_country,
+
+        date_trunc('second', current_timestamp at time zone 'UTC')
+            as dbt_loaded_at
+),
+
+final as (
+    select * from stores
+    union all
+    select * from unknown_store
 )
 
 select * from final

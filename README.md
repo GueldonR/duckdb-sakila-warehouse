@@ -38,14 +38,14 @@ Models are organised by business area in `models/staging/` and by role (`dimensi
 - **Degenerate keys.** `rental_id` and `payment_id` stay in the facts. They identify the event and have no attributes of their own.
 - **Role-playing date dimension.** `dim_time` is joined as `rental_date_sk`, `return_date_sk` and `payment_date_sk`. Its range is fixed (2005-01-01 to 2006-12-31) so the table is identical on every build.
 - **Flattened location.** Address, city and country are denormalized into `dim_customer` and `dim_store` instead of a separate location dimension. City → country is a fixed-depth many-to-one hierarchy, which Kimball recommends flattening. A conformed `dim_location` would only be needed to slice customers and stores by one shared geography.
-- **Nulls are kept.** Missing keys stay null instead of being replaced with an "Unknown" member: 183 rentals have no return date, and 5 payments have no rental (so no film or store). Labelling nulls is left to the reporting layer. The related tests allow these nulls explicitly.
+- **Default rows instead of null keys.** Missing keys point to a `-1` row ("No date" in `dim_time`, "Unknown" in `dim_film` and `dim_store`), so inner joins never drop fact rows.
 - **Data minimisation.** Personal data never reaches the marts. Customer and staff names and emails and all postal codes are dropped in staging, and customer street addresses are not carried into `dim_customer`. Store addresses are kept because they are business data used to identify stores. Models keep only what the analytical questions need.
 - **One category per film.** Every film has exactly one category, so category is flattened into `dim_film`.
 - **Type 1 dimensions.** Dimensions are rebuilt from the current source on every `dbt build`, so a changed attribute overwrites the old value and no history is kept. Sakila has no change history to build from anyway. Tracking changes would need dbt snapshots (SCD2).
 
 ## Data quality
 
-`dbt build` runs the models and their tests together: `unique` and `not_null` on keys, and `relationships` tests from every fact key to its dimension and from staging to staging. Facts to dimensions are checked through the surrogate keys.
+`dbt build` runs the models and their tests together: `unique` and `not_null` on keys (including every fact foreign key), and `relationships` tests from every fact key to its dimension and from staging to staging. Facts to dimensions are checked through the surrogate keys.
 
 ## Analyses
 

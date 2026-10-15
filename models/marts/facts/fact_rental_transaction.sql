@@ -32,7 +32,9 @@ final as (
         rental.rental_id,
         
         cast(strftime(rental.rental_date, '%Y%m%d') as integer) as rental_date_sk,
-        cast(strftime(rental.return_date, '%Y%m%d') as integer) as return_date_sk,
+        -- -1 is the dim_time default row for rentals not yet returned.
+        coalesce(cast(strftime(rental.return_date, '%Y%m%d') as integer), -1)
+            as return_date_sk,
 
      
         date_diff('day', rental.rental_date, rental.return_date) as rental_days,

@@ -48,10 +48,10 @@ models:
                 field: store_id
 
   - name: dim_store
-    description: One row per store. Store address is business data, not personal data, so it is kept to identify stores by location.
+    description: One row per store, plus an Unknown default row (-1). Store address is business data, not personal data, so it is kept to identify stores by location.
     columns:
       - name: store_sk
-        description: Surrogate key, md5 of store_id.
+        description: Surrogate key, md5 of store_id. -1 for the Unknown default row.
         data_tests: [unique, not_null]
       - name: store_id
         description: Natural key from the source system.
@@ -64,17 +64,17 @@ models:
         data_tests: [not_null]
 
   - name: dim_film
-    description: One row per film. 
+    description: One row per film, plus an Unknown default row (-1).
     columns:
       - name: film_sk
-        description: Surrogate key, md5 of film_id.
+        description: Surrogate key, md5 of film_id. -1 for the Unknown default row.
         data_tests: [unique, not_null]
       - name: film_id
         description: Natural key from the source system.
         data_tests: [unique, not_null]
 
   - name: dim_time
-    description: One row per calendar day. Date attributes for grouping and filtering facts by date.
+    description: One row per calendar day, plus a "No date" default row (-1). Date attributes for grouping and filtering facts by date.
     columns:
       - name: date_sk
         description: Key for the date, an integer of the form YYYYMMDD.
