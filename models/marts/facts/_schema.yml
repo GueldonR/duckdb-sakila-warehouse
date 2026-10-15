@@ -57,7 +57,7 @@ models:
         description: Whole days between rental and return. Null if not returned.
 
   - name: fact_payment_transaction
-    description: One row per payment. Foreign keys to the dimensions plus the payment amount. Film and store come from the linked rental, so they are null for payments without one.
+    description: One row per payment. Foreign keys to the dimensions plus the payment amount. Film and store come from the linked rental, so they point to the Unknown default rows for payments without one.
     columns:
       - name: payment_id
         description: Degenerate key, identifies the payment (source ID).
@@ -86,15 +86,17 @@ models:
                 to: ref('dim_staff')
                 field: staff_sk
       - name: film_sk
-        description: Foreign key to dim_film, via the linked rental. Null when the payment has no rental.
+        description: Foreign key to dim_film, via the linked rental. -1 (dim_film's "Unknown" row) for the 5 payments without a rental.
         data_tests:
+          - not_null
           - relationships:
               arguments:
                 to: ref('dim_film')
                 field: film_sk
       - name: store_sk
-        description: Foreign key to dim_store, the store holding the rented inventory copy. Null when the payment has no rental.
+        description: Foreign key to dim_store, the store holding the rented inventory copy. -1 (dim_store's "Unknown" row) for the 5 payments without a rental.
         data_tests:
+          - not_null
           - relationships:
               arguments:
                 to: ref('dim_store')

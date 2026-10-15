@@ -49,8 +49,9 @@ final as (
     select
         dim_customer.customer_sk,
         dim_staff.staff_sk,
-        dim_film.film_sk,
-        dim_store.store_sk,
+        -- '-1' is the default row for payments without a rental.
+        coalesce(dim_film.film_sk, '-1') as film_sk,
+        coalesce(dim_store.store_sk, '-1') as store_sk,
         cast(strftime(payment.payment_date, '%Y%m%d') as integer)
             as payment_date_sk,
         payment.payment_id,
