@@ -4,9 +4,11 @@ models:
     columns:
       - name: rental_id
         description: Degenerate key, identifies the rental (source ID).
+        data_type: integer
         data_tests: [unique, not_null]
       - name: customer_sk
         description: Foreign key to dim_customer.
+        data_type: varchar
         data_tests:
           - not_null
           - relationships:
@@ -15,6 +17,7 @@ models:
                 field: customer_sk
       - name: film_sk
         description: Foreign key to dim_film, via the rented inventory copy.
+        data_type: varchar
         data_tests:
           - not_null
           - relationships:
@@ -23,6 +26,7 @@ models:
                 field: film_sk
       - name: store_sk
         description: Foreign key to dim_store, the store holding the inventory copy.
+        data_type: varchar
         data_tests:
           - not_null
           - relationships:
@@ -31,6 +35,7 @@ models:
                 field: store_sk
       - name: staff_sk
         description: Foreign key to dim_staff, the staff member who handled the rental.
+        data_type: varchar
         data_tests:
           - not_null
           - relationships:
@@ -39,6 +44,7 @@ models:
                 field: staff_sk
       - name: rental_date_sk
         description: Foreign key to dim_time, the date the film was rented.
+        data_type: integer
         data_tests:
           - not_null
           - relationships:
@@ -47,6 +53,7 @@ models:
                 field: date_sk
       - name: return_date_sk
         description: Foreign key to dim_time, the date the film was returned. -1 (dim_time's "No date" row) for the 183 rentals not yet returned.
+        data_type: integer
         data_tests:
           - not_null
           - relationships:
@@ -55,15 +62,23 @@ models:
                 field: date_sk
       - name: rental_days
         description: Whole days between rental and return. Null if not returned.
+        data_type: bigint
+      - name: dbt_loaded_at
+        description: Timestamp when dbt loaded the row. This is a dbt-managed column, not part of the source data.
+        data_type: timestamp with time zone
+        data_tests:
+          - not_null
 
   - name: fact_payment_transaction
     description: One row per payment. Foreign keys to the dimensions plus the payment amount. Film and store come from the linked rental, so they point to the Unknown default rows for payments without one.
     columns:
       - name: payment_id
         description: Degenerate key, identifies the payment (source ID).
+        data_type: integer
         data_tests: [unique, not_null]
       - name: rental_id
         description: Degenerate key, the rental the payment belongs to. Null for 5 payments in the source data.
+        data_type: integer
         data_tests:
           - relationships:
               arguments:
@@ -71,6 +86,7 @@ models:
                 field: rental_id
       - name: customer_sk
         description: Foreign key to dim_customer.
+        data_type: varchar
         data_tests:
           - not_null
           - relationships:
@@ -79,6 +95,7 @@ models:
                 field: customer_sk
       - name: staff_sk
         description: Foreign key to dim_staff, the staff member who took the payment.
+        data_type: varchar
         data_tests:
           - not_null
           - relationships:
@@ -87,6 +104,7 @@ models:
                 field: staff_sk
       - name: film_sk
         description: Foreign key to dim_film, via the linked rental. -1 (dim_film's "Unknown" row) for the 5 payments without a rental.
+        data_type: varchar
         data_tests:
           - not_null
           - relationships:
@@ -95,6 +113,7 @@ models:
                 field: film_sk
       - name: store_sk
         description: Foreign key to dim_store, the store holding the rented inventory copy. -1 (dim_store's "Unknown" row) for the 5 payments without a rental.
+        data_type: varchar
         data_tests:
           - not_null
           - relationships:
@@ -103,6 +122,7 @@ models:
                 field: store_sk
       - name: payment_date_sk
         description: Foreign key to dim_time, the date of the payment.
+        data_type: integer
         data_tests:
           - not_null
           - relationships:
@@ -111,5 +131,11 @@ models:
                 field: date_sk
       - name: amount
         description: Payment amount. Additive.
+        data_type: decimal(5,2)
+        data_tests:
+          - not_null
+      - name: dbt_loaded_at
+        description: Timestamp when dbt loaded the row. This is a dbt-managed column, not part of the source data.
+        data_type: timestamp with time zone
         data_tests:
           - not_null
